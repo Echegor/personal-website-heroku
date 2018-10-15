@@ -1,0 +1,8 @@
+{
+  "name": "Luis Echegorri",
+  "description": "A personal Website",
+  "repository": "https://github.com/Echegor/personal-website-heroku",
+  "logo": "",
+  "keywords": ["node", "express", "heroku"],
+  "image": "heroku/nodejs"
+}

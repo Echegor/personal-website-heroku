@@ -1,20 +1,30 @@
 {
-  "name": "website",
-  "version": "1.0.0",
-  "description": "personal website",
-  "main": "server.js",
+  "name": "Luis Echegorri",
+  "version": "0.3.0",
+  "description": "a personal website",
+  "engines": {
+    "node": "8.9.1"
+  },
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "express": "^4.15.2"
+  },
+  "devDependencies": {
+    "request": "^2.81.0",
+    "tape": "^4.7.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Echegor/personal-website-heroku.git"
+    "url": "https://github.com/Echegor/personal-website-heroku"
   },
-  "author": "Luis Echegorri",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Echegor/personal-website-heroku/issues"
-  },
-  "homepage": "https://github.com/Echegor/personal-website-heroku#readme"
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "MIT"
 }
