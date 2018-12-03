@@ -1,62 +1,76 @@
 const express = require('express')
-const Mailgun = require('mailgun').Mailgun;
+const Mailjet = require('node-mailjet');
 const path = require('path')
 const PORT = process.env.PORT || 5000
 
-var mailgun = new Mailgun({apiKey: api_key});
-var api_key = '4b36ce373becc14ce758e6316f66122c-059e099e-cf85a125';
-//Your domain, from the Mailgun Control Panel
-var domain = 'luis.echegorri@gmail.com';
-//Your sending email address
-var from_who = 'luis.echegorri@gmail.com.com';
+var MailjetClient = Mailjet.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE,
+    {
+        proxyUrl: 'http://swgscan.wakefern.com:8080'
+    });
+
+// console.log("Starting. ENV variables = %o",process.env)
 
 function done(event) {
     console.log("Deployed on port ", PORT)
 }
 
-//docs
-//https://www.mailgun.com/blog/how-to-send-transactional-email-in-a-nodejs-app-using-the-mailgun-api
-//https://libraries.io/npm/mailgun
+function handlePostResponse(response){
+    console.log("Handling post response %o", response)
+}
+
+function handleError(response){
+    console.log("Handling error %o", response)
+}
+
 var app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', function (req, res) {
     console.log("Browsed home");
     res.sendFile(path.join(__dirname, 'public', 'index.html'), done);
 });
-app.get('/email/:mail', function (req, res) {
-    console.log("Browsed to email");
-    //We pass the api_key and domain to the wrapper, or it won't be able to identify + send emails
-    var data = {
-        //Specify email data
-        from: from_who,
-        //The email to contact
-        to: req.params.mail,
-        //Subject and text data
-        subject: 'Hello from Mailgun',
-        html: 'Hello, This is not a plain-text email, I wanted to test some spicy Mailgun sauce in NodeJS! <a href="http://0.0.0.0:3030/validate?' + req.params.mail + '">Click here to add your email address to a mailing list</a>'
+
+
+app.get('/email/', function (req, res) {
+    console.log("Browsed to email. Params ,%o",req.params);
+    //TODO validate params
+
+    var sendEmail = MailjetClient.post('send');
+
+    var emailData = {
+        
+        'FromEmail': req.query.theirEmail,
+        'FromName': req.query.name,
+        'Subject': req.query.subject,
+        'Text-part': req.query.content,
+        'Recipients': [{'Email': 'luis.echegorri@gmail.com'}],
+        // 'Attachments': [{
+        //     "Content-Type": "text-plain",
+        //     "Filename": "test.txt",
+        //     "Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK", // Base64 for "This is your attached file!!!"
+        // }]
     }
-    //Invokes the method to send emails given the above data with the helper library
-    console.log("got here");
-    mailgun.sendText(from_who, ['luis.echegorri@gmail.com'],
-        'This is the subject',
-        'This is the text',
-        from_who, {},
-        function (err) {
-            if (err) {
-                console.log('Oh noes: ' + err);
-                res.sendStatus(500);
-            }
-        else {
-                console.log('Success');
-                res.sendStatus(200);
-            }
+
+    // res.sendStatus(200);
+
+    sendEmail
+        .request(emailData)
+        .then((data) => res.send(data))
+        .catch((error) => {
+            console.log("An error has occured %o" , error);
+            res.sendStatus(500)
         });
 });
+
+
+
 app.listen(PORT, console.log(`Listening on ${ PORT }`));
 
 process.on('uncaughtException', function (err) {
     console.log('UNCAUGHT EXCEPTION - keeping process alive:', err); // err.message is "foobar"
 });
+
+
+
 
 
   
