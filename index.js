@@ -3,10 +3,7 @@ const Mailjet = require('node-mailjet');
 const path = require('path')
 const PORT = process.env.PORT || 5000
 
-var MailjetClient = Mailjet.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE,
-    {
-        proxyUrl: 'http://swgscan.wakefern.com:8080'
-    });
+var MailjetClient = Mailjet.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE);
 
 // console.log("Starting. ENV variables = %o",process.env)
 
@@ -37,7 +34,7 @@ app.get('/email/', function (req, res) {
     var sendEmail = MailjetClient.post('send');
 
     var emailData = {
-        
+
         'FromEmail': req.query.theirEmail,
         'FromName': req.query.name,
         'Subject': req.query.subject,
