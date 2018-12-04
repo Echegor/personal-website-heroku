@@ -38,9 +38,9 @@ app.get('/email/', function (req, res) {
         'FromEmail': 'web.luis@echegorri.com',
         'FromName': req.query.name,
         'Subject': req.query.subject,
-        'Text-part': req.query.content,
+        'Text-part': 'New email from ' + req.query.theirEmail + '\nContent:\n' req.query.content,
         'To' : 'luis.echegorri@gmail.com',
-        'Cc' : req.query.theirEmail
+        //'Cc' : req.query.theirEmail
         // 'Attachments': [{
         //     "Content-Type": "text-plain",
         //     "Filename": "test.txt",
