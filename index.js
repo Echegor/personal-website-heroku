@@ -40,7 +40,7 @@ app.get('/email/', function (req, res) {
         'Subject': req.query.subject,
         'Text-part': req.query.content,
         'To' : 'luis.echegorri@gmail.com',
-        'Cc' : req.query.FromEmail
+        'Cc' : req.query.theirEmail
         // 'Attachments': [{
         //     "Content-Type": "text-plain",
         //     "Filename": "test.txt",
@@ -53,7 +53,7 @@ app.get('/email/', function (req, res) {
     sendEmail
         .request(emailData)
         .then((data) => {
-            console.log("Successfully sent email. Received %o" , data);
+            console.log("Successfully sent email.");
             res.send(data)
         })
         .catch((error) => {
