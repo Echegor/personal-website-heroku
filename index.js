@@ -35,11 +35,12 @@ app.get('/email/', function (req, res) {
 
     var emailData = {
 
-        'FromEmail': req.query.theirEmail,
+        'FromEmail': 'web.luis@echegorri.com',
         'FromName': req.query.name,
         'Subject': req.query.subject,
         'Text-part': req.query.content,
-        'Recipients': [{'Email': 'luis.echegorri@gmail.com'}],
+        'To' : 'luis.echegorri@gmail.com',
+        'Cc' : req.query.FromEmail
         // 'Attachments': [{
         //     "Content-Type": "text-plain",
         //     "Filename": "test.txt",
