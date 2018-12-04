@@ -28,7 +28,7 @@ app.get('/', function (req, res) {
 
 
 app.get('/email/', function (req, res) {
-    console.log("Browsed to email. Params ,%o",req.params);
+    console.log("Browsed to email. Params ,%o",req.query);
     //TODO validate params
 
     var sendEmail = MailjetClient.post('send');
@@ -49,10 +49,13 @@ app.get('/email/', function (req, res) {
     }
 
     // res.sendStatus(200);
-
+    console.log("Sending email with data %o",emailData);
     sendEmail
         .request(emailData)
-        .then((data) => res.send(data))
+        .then((data) => {
+            console.log("Successfully sent email. Received %o" , data);
+            res.send(data)
+        })
         .catch((error) => {
             console.log("An error has occured %o" , error);
             res.sendStatus(500)
